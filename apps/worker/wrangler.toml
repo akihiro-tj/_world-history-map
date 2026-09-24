@@ -1,29 +1,21 @@
-name = "world-history-map-tiles"
-main = "src/index.ts"
-compatibility_date = "2025-12-01"
-minify = true
+# Cloudflare Pages project: frontend static assets + Pages Functions serving PMTiles from R2.
+#
+#   Production (branch main):  https://world-history-map.pages.dev          → R2 world-history-map-tiles-prod
+#   Preview (other branches):  https://<branch>.world-history-map.pages.dev → R2 world-history-map-tiles-dev
+#
+# Deploy: pnpm build && pnpm --filter @world-history-map/worker run deploy -- --branch <branch>
+# The R2 buckets must already exist; `wrangler pages deploy` does not create them.
 
+name = "world-history-map"
+compatibility_date = "2025-12-01"
+pages_build_output_dir = "../frontend/dist"
+
+# Preview deployments and `wrangler pages dev` read the DEV bucket.
 [[r2_buckets]]
 binding = "BUCKET"
-bucket_name = "world-history-map-tiles"
+bucket_name = "world-history-map-tiles-dev"
 
-[vars]
-ALLOWED_ORIGINS = "https://world-history-map.pages.dev,https://*.world-history-map.pages.dev"
-
-# --- Production environment (world-history-map-tiles-prod bucket) ---
 [env.production]
 [[env.production.r2_buckets]]
 binding = "BUCKET"
 bucket_name = "world-history-map-tiles-prod"
-
-[env.production.vars]
-ALLOWED_ORIGINS = "https://world-history-map.pages.dev,https://*.world-history-map.pages.dev"
-
-# --- Preview environment (world-history-map-tiles-dev bucket) ---
-[env.preview]
-[[env.preview.r2_buckets]]
-binding = "BUCKET"
-bucket_name = "world-history-map-tiles-dev"
-
-[env.preview.vars]
-ALLOWED_ORIGINS = "https://*.world-history-map.pages.dev"
