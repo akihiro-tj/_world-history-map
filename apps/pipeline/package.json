@@ -16,6 +16,6 @@
     "@world-history-map/tiles": "workspace:*",
     "tsx": "^4.19.4",
     "vitest": "^4.1.5",
-    "zod": "^4.4.2"
+    "zod": "^4.4.3"
   }
 }
