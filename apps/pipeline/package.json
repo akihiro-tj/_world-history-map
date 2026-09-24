@@ -9,12 +9,12 @@
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@notionhq/client": "^5.20.0",
-    "@turf/turf": "^7.3.5",
+    "@notionhq/client": "^5.26.0",
+    "@turf/turf": "^7.4.0",
     "@types/node": "^24.12.2",
     "@vitest/coverage-v8": "^4.1.5",
     "@world-history-map/tiles": "workspace:*",
-    "tsx": "^4.19.4",
+    "tsx": "^4.23.13",
     "vitest": "^4.1.5",
     "zod": "^4.4.2"
   }
