@@ -11,7 +11,7 @@
   "devDependencies": {
     "@notionhq/client": "^5.20.0",
     "@turf/turf": "^7.3.5",
-    "@types/node": "^24.12.2",
+    "@types/node": "^25.6.2",
     "@vitest/coverage-v8": "^4.1.5",
     "@world-history-map/tiles": "workspace:*",
     "tsx": "^4.19.4",
