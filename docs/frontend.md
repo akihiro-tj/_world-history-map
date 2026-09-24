@@ -1,11 +1,11 @@
 # frontend: React アプリケーション
 
-> Last updated: 2026-04-26T00:00:00+09:00
+> Last updated: 2026-09-24T00:00:00+09:00
 
 ## 役割
 
 React + MapLibre GL JS の SPA。任意の歴史年を選ぶとその年の世界地図を PMTiles で描画し、領土をクリックすると Notion 由来の概況・年表を読めるパネルが開く。
-静的ホスティング（Cloudflare Pages）で配信する単一ページアプリ。タイルの年 → ハッシュ付きファイル名マッピングは `@world-history-map/tiles` から **ビルド時に import** され、runtime fetch しない。タイル本体は dev 時は vite middleware（`packages/tiles/dist/`）から、prod / preview 時は Worker 経由で R2 から読む。
+静的ホスティング（Cloudflare Pages）で配信する単一ページアプリ。タイルの年 → ハッシュ付きファイル名マッピングは `@world-history-map/tiles` から **ビルド時に import** され、runtime fetch しない。タイル本体は dev 時は vite middleware（`packages/tiles/dist/`）から、prod / preview 時は同一オリジンの Pages Function（`/pmtiles/*`）経由で R2 から読む。
 
 ## 状態設計
 
@@ -71,8 +71,8 @@ territoryOpen ─── CLEAR_SELECTION ──→ none
 
 タイル URL の組み立ては `tiles-config.ts` に集約されている。`VITE_TILES_BASE_URL` 環境変数の有無で挙動が切り替わる:
 
-- 未設定（dev） — `getTilesUrl(year, '')` が `pmtiles:///pmtiles/world_{year}.{hash}.pmtiles` を返す。`vite.config.ts` の dev middleware が `packages/tiles/dist/` を `/pmtiles/` で配信する（`*.pmtiles` バイナリと `index.json` の両方を含む）
-- 設定あり（prod / preview） — `pmtiles://{VITE_TILES_BASE_URL}/world_{year}.{hash}.pmtiles` を返す。ハッシュは `@world-history-map/tiles` の `manifest.ts` からビルド時に解決される（runtime fetch なし）
+- 未設定（既定。dev / preview / prod 共通） — `getTilesUrl(year, '')` が同一オリジンの `pmtiles:///pmtiles/world_{year}.{hash}.pmtiles` を返す。dev では `vite.config.ts` の dev middleware が `packages/tiles/dist/` を `/pmtiles/` で配信し（`*.pmtiles` バイナリと `index.json` の両方を含む）、Cloudflare Pages 上では `*.pmtiles` を Pages Function が R2 から、`index.json` を静的アセットとして配信する
+- 設定あり（別オリジンからタイルを読む場合のみ） — `pmtiles://{VITE_TILES_BASE_URL}/world_{year}.{hash}.pmtiles` を返す。ハッシュは `@world-history-map/tiles` の `manifest.ts` からビルド時に解決される（runtime fetch なし）
 
 `MapView` は `useMapData` から得た `pmtilesUrl` を `<Source type="vector">` に渡し、PMTiles プロトコルが HTTP Range Request でスパース読み込みする。主要レイヤー:
 - `TerritoryLayer` — source-layer `territories` の fill / outline。`color-scheme.json` を参照した `match` expression で SUBJECTO または NAME ごとに色分け

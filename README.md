@@ -10,7 +10,7 @@ See [`docs/overview.md`](./docs/overview.md) for architecture and [`CLAUDE.md`](
 apps/
   frontend/   # React app (MapLibre GL JS + react-map-gl + PMTiles)
   pipeline/   # CLI data pipeline (Node.js, @turf/turf, tippecanoe)
-  worker/     # Cloudflare Worker (R2 tile serving)
+  worker/     # Cloudflare Pages project config + Pages Functions (R2 tile serving)
 packages/
   tiles/          # Hashed PMTiles build + manifest generation
   design-tokens/  # Design token build (theme.css / MapLibre role colors)
@@ -69,11 +69,11 @@ pnpm pipeline run --years 1600..1800   # Process a year range
 pnpm territory-sync                    # Sync territory descriptions from Notion
 ```
 
-#### Worker
+#### Cloudflare Pages
 
 ```bash
-pnpm --filter @world-history-map/worker run dev      # wrangler dev
-pnpm --filter @world-history-map/worker run deploy   # wrangler deploy
+pnpm --filter @world-history-map/worker run dev      # wrangler pages dev (needs `pnpm build` first)
+pnpm --filter @world-history-map/worker run deploy   # wrangler pages deploy (normally done by CI)
 ```
 
 #### Tiles
