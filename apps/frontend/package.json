@@ -18,7 +18,7 @@
     "@world-history-map/design-tokens": "workspace:*",
     "@world-history-map/tiles": "workspace:*",
     "clsx": "^2.1.1",
-    "maplibre-gl": "^5.24.0",
+    "maplibre-gl": "^6.4.1",
     "pmtiles": "^4.4.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
